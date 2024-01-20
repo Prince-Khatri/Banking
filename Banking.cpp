@@ -88,7 +88,8 @@ struct Date{
     public:
 
     unsigned int day,month;
-    unsigned int year;}Today;
+    unsigned int year;}
+    Today;
     
 
 int age(struct Date &DOB){
@@ -163,7 +164,7 @@ class Bank:public ui{
 
 //staff details
 
-class Employee:public ui{
+class Employee:protected Bank{//giving acess to bank for removing the ambiguity
     protected:
     string Emp_Id;//id
     string Name;
@@ -227,40 +228,40 @@ class Employee:public ui{
     
 };
 
-class Manager:protected Employee,protected Bank{
+class Manager:protected Employee{
     protected:
-    unsigned short int Rate=7;
+    unsigned short int Rate;
 
 
     public:
-    Manager(){}
-    Manager(string k,string kp):Employee(k,kp){
+    Manager(){
+        Rate=7;
     }
-    Manager(string k,string kp,Date tp,double sal):Employee(k,kp,tp,sal){}
+    Manager(string k,string kp):Employee(k,kp){
+        Rate=7;
+    }
+    Manager(string k,string kp,Date tp,double sal):Employee(k,kp,tp,sal){
+        Rate=7;
+    }
     
 
     
-    // void Bank_N(string k);
-    // void Disp_Bank_N();
-    // string Bank_N();
-
-    // void Disp_Amount();
-    // void Amount_in_B(long double ip);
-    // long double Amount_in_B();
-
-    // void Rate(unsigned short int lp);
-    // void Disp_Rate();
-    // unsigned short int Rate();
-
-
+    //Bank name manipaluation
+    
+    //assning value
     void Bank_N(string k){
         //entering bank name
-    Bank_Name=k;
+        Bank_Name=k;
 
     }
+    
+    //using value
     void Disp_Bank_N(){
-        cout<<Bank_Name<<endl;
+        string css[1][2]={{"Bank Name ",Bank_Name}};
+        print(css,1);
     }
+    
+    //printing value
     string Bank_N(){//for giving the value to any input
         return Bank_name();
 
@@ -276,31 +277,55 @@ class Manager:protected Employee,protected Bank{
     }
 
     void Disp_Amount(){
-        //display anount in bank
-        cout<<Amount_in_Bank<<endl;
+        //display amount in bank
+        ostringstream oss;
+        oss<<fixed<<setprecision(2)<<Amount_in_Bank;
+        string tp[1][2]={"Amount in Bank ",oss.str()};
+        print(tp,1);
+
     }
+    
     long double Amount_in_B(){
         return Amount_in_bank();
     }
 
     //rate
 
+    //assinging value
     void rate(unsigned short int lp){
         Rate=lp;
     }
+    
+    //using value
     unsigned short int rate(){
         return Rate;
     }
+    //displaying rate
     void Disp_Rate(){
-        cout<<Rate<<"%"<<endl;
-    }
+        ostringstream oss;
+        oss<<Rate<<" %";
+        string kp[1][2]={"Rate per year ",oss.str()};
 
+        print(kp,1);
+
+    }
 
     
 
 
 };
 
+    // void Bank_N(string k);
+    // void Disp_Bank_N();
+    // string Bank_N();
+
+    // void Disp_Amount();
+    // void Amount_in_B(long double ip);
+    // long double Amount_in_B();
+
+    // void Rate(unsigned short int lp);
+    // void Disp_Rate();
+    // unsigned short int Rate();
 
 
 int main(){
@@ -315,7 +340,7 @@ int main(){
     
 
     
-    // Employee M("Prince");
+    Manager M1("Prince","IS0089");
     // Employee M2("Prince2","1MS23Is021-T");
     // Employee M3("Prince3","1MS23Is021-T",dob);
     // Employee M4("Prince4","1MS23Is021-T",dob,1000000);
@@ -325,6 +350,11 @@ int main(){
     // M3.Display_Employee_Details();
     // M4.Display_Employee_Details();
     // M5.Display_Employee_Details();
+    M1.Disp_Amount();
+    M1.Bank_N("SBI");
+    M1.Disp_Bank_N();
+    M1.Disp_Rate();
+
 
     
     
