@@ -1,10 +1,13 @@
-Employee M("Prince");
-    Employee M2("Prince2","1MS23Is021-T");
-    Employee M3("Prince3","1MS23Is021-T",dob);
-    Employee M4("Prince4","1MS23Is021-T",dob,1000000);
-    Employee M5("Prince","1MS23Is021-T",100000000);
-    M.Display_Employee_Details();
-    M2.Display_Employee_Details();
-    M3.Display_Employee_Details();
-    M4.Display_Employee_Details();
-    M5.Display_Employee_Details();
+void Display_Statement(){
+        string cp[Statement.size()+1];
+        for(size_t i=0;i<Statement.size();i++){
+            cp[i]=Statement[i];
+
+        }
+        ostringstream occ;
+        occ<<"Amount left "<<setprecision('0')<<Amount;
+        cp[Statement.size()]=occ.str();
+
+        print(cp,Statement.size()+1);
+
+    }
