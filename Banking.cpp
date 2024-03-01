@@ -338,34 +338,7 @@ public:
     // unsigned short int Rate();
 };
 
-class User : public Bank
-{
-protected:
-    string Name;
-    string C_Id;
-    string Aadhar_No;
-    struct Date DOB;
-    string Work;
-    string Address;
 
-public:
-    User() {}
-    User(string tp, string cp, string kp, string np, string bp, Date mp) : Name(tp), C_Id(cp), Aadhar_No(kp), Work(np), Address(bp)
-    {
-        Copy_Date(DOB, mp);
-    }
-    void Display_User_Details()
-{
-    ostringstream oss;
-    oss<<setw(2)<<setfill('0')<<DOB.day<<setfill('0')<<setw(2)<<DOB.month<<setw(4)<<setfill('0')<<DOB.year;
-    string details[6][2]={{"Name ",Name},{"Customer Id ",C_Id},{"Aadhar Number ",Aadhar_No},{"DOB ",oss.str()},{"Work ",Work},{"Address",Address}};
-    print(details,6);
-
-}
-    
-    
-
-};
 
 class Account{
     protected:
@@ -384,8 +357,9 @@ class Account{
 
 };
 
-class Saving_Account:public User,protected Account{
+class Saving_Account:protected Account{
     public:
+    ui a;
     
     vector<string>Statement;
     void withdraw(double cash){
@@ -411,6 +385,9 @@ class Saving_Account:public User,protected Account{
         Statement.push_back(opp.str());
 
     }
+    Saving_Account(){}
+
+
     Saving_Account(string no,string pass,string ifsc,double cash):Account( no,pass, ifsc,Today,cash){
         deposit(cash);
 
@@ -425,7 +402,7 @@ class Saving_Account:public User,protected Account{
         occ<<"Balance "<<setprecision('0')<<Amount;
         cp[Statement.size()]=occ.str();
 
-        print(cp,Statement.size()+1);
+        a.print(cp,Statement.size()+1);
 
     }
 
@@ -441,6 +418,39 @@ class Saving_Account:public User,protected Account{
 // }
 
 };
+
+
+class User : public Bank
+{
+protected:
+    string Name;
+    string C_Id;
+    string Aadhar_No;
+    struct Date DOB;
+    string Work;
+    string Address;
+    Saving_Account S;
+
+public:
+    User() {}
+    User(string tp, string cp, string kp, string np, string bp, Date mp) : Name(tp), C_Id(cp), Aadhar_No(kp), Work(np), Address(bp)
+    {
+        Copy_Date(DOB, mp);
+    }
+    void Display_User_Details()
+{
+    ostringstream oss;
+    oss<<setw(2)<<setfill('0')<<DOB.day<<setfill('0')<<setw(2)<<DOB.month<<setw(4)<<setfill('0')<<DOB.year;
+    string details[6][2]={{"Name ",Name},{"Customer Id ",C_Id},{"Aadhar Number ",Aadhar_No},{"DOB ",oss.str()},{"Work ",Work},{"Address",Address}};
+    print(details,6);
+
+}
+    
+    
+
+};
+
+
 
 
 // void create_user(){
