@@ -230,9 +230,10 @@ public:
         Copy_Date(DOB, tp);
     }
 
-    Employee(string k, string kp,string km, double sal, Date tp) : Name(k), Emp_Id(kp),Job_Role(km), salary(sal)
+    // MAx use
+    Employee(string k, string kp,string km, double sal, Date tp,Date tg) : Name(k), Emp_Id(kp),Job_Role(km), salary(sal)
     {
-        Copy_Date(Date_of_joining, Today);
+        Copy_Date(Date_of_joining, tg);
         Copy_Date(DOB, tp);
     }
 
@@ -263,8 +264,8 @@ class Manager : public Employee,public Bank
 {
 protected:
     unsigned short int Rate;
-    vector<Employee>Employee_List;
-    vector<User>User_List;
+    // vector<Employee>Employee_List;
+    // vector<User>User_List;
 
 
 public:
@@ -276,7 +277,7 @@ public:
     {
         Rate = 7;
     }
-    Manager(string k, string kp,string km, Date tp, double sal) : Employee(k, kp,km, tp, sal)
+    Manager(string k, string kp,string km, Date tp, Date tg,double sal) : Employee(k, kp,km,sal, tp, tg )
     {
         Rate = 7;
     }
@@ -368,6 +369,7 @@ public:
         cin>>Name;
         cout<<"Enter Date of Joining";
     }
+
 
     
     // void Bank_N(string k);
@@ -582,7 +584,7 @@ long double Bank::Amount_in_Bank=10000000;
 //     }
 // }
 
-void input_check(string a,string b="y"){
+bool input_check(string a,string b="y"){
     try{
         if(a!=b){
             throw a;
@@ -590,9 +592,89 @@ void input_check(string a,string b="y"){
 
     }
     catch(string msg){
-        cerr<<"Error!!\tWrong Input\t"<<msg<<endl;
+        ostringstream oss;
+        oss<<"Error!!\tWrong Input\t"<<msg<<endl;
+        string erro[1];
+        erro[0]=oss.str();
+        ui printer;
+        printer.print(erro,1);
+        return false;
+
+    }
+    catch(...){
+        cout<<setw(50)<<"Error!!!\tUnexpected Error"<<endl;
+        return false;
+    }
+    return true;
+
+}
+
+
+
+void manager_setup(vector<Manager> &M){
+    int noOfManager;
+    cout<<endl<<setw(30)<<"Enter no of Manager: ";
+    try{
+        cin>>noOfManager;
+        if(noOfManager<=0){
+            throw noOfManager;
+        }
+    }
+    catch(int a){
+
+        cerr<<endl<<setw(80)<<"Kindly enter valid No. of Managers \t,otherwise the Bank would be Robbed :)"<<endl;
+    
     }
 
+    for(int i=0;i<noOfManager;i++){
+        // Temp details
+        string Emp_Id1; 
+        string Name1;
+        string Job_Role1;
+        struct Date DOJ1; 
+        struct Date DOB1;             
+        double salary1;
+        
+        if(!i){
+        cout<<"\nEnter Details For `Head Manager`:\n";
+        }
+        else{
+            cout<<setw(50)<<"\nEnter Details For Manager "<<i<<":"<<endl;
+        } 
+
+        cout << setw(40) << "Enter Name: ";
+        cin >> Name1;
+        
+        cout << setw(40) << "Enter EmpId: ";
+        cin >> Emp_Id1;
+
+        cout << setw(40) << "Enter Job Role: ";
+        cin >> Job_Role1;
+
+        cout << "Hint: DD MM YYYY" << endl;
+        cout << setw(40) << "Enter DOJ: ";
+        cin >> DOJ1.day >> DOJ1.month >> DOJ1.year;
+
+        cout << setw(40) << "Enter DOB: ";
+        cin >> DOB1.day >> DOB1.month >> DOB1.year;
+
+        cout<< setw(40)<< "Enter salary: ";
+        cin>>salary1;
+
+        
+
+        Manager M1(Name1,Emp_Id1,Job_Role1,DOB1,DOJ1,salary1);
+        
+        M.push_back(M1);
+    
+    }
+
+
+
+
+
+
+    
 }
 
 int main(){
@@ -625,6 +707,19 @@ int main(){
 // wasnt able to complete this project as this project is going to be my tech debt;
  
 
+//let's start counting days now i am working ont this project
+// day X+0 #day1
+/*  
+    #day1
+        today i am going to work according to the new function i need 
+        manager_setup{
+            -no. of managers and their details;
+        
+        }
+
+        manager search; currenlty not needed when needed we will make it
+        
+    */
 
 
 
@@ -632,37 +727,7 @@ int main(){
 
 
 
-
-    // // Manager M1("Prince","IS0089");
-    // // Employee M2("Prince2","1MS23Is021-T");
-    // // Employee M3("Prince3","1MS23Is021-T",dob);
-    // // Manager M4("Prince4","1MS23Is021-T",dob,1000000);
-    // // Employee M5("Prince","1MS23Is021-T",100000000);
-    // // M.Display_Employee_Details();
-    // // M2.Display_Employee_Details();
-    // // M3.Display_Employee_Details();
-    // // M4.Display_Employee_Details();
-    // // M5.Display_Employee_Details();
-    // // M1.Disp_Amount();
-    // // M1.Bank_N("SBI");
-    // // M1.Disp_Bank_N();
-    // // M1.Disp_Rate();
-    // // M4.Display_Employee_Details();
-    // // Manager Lucky("Lucky","1MS23ME021",lucDOB,20000);
-    // // Lucky.Display_Employee_Details();
-
-    // User u("Sahil","9009 2237 3892","1234 5678 9876","Student","Benguluru",dob);
-    // u.Display_User_Details();
-    // Saving_Account s("1MS23IS021-T","2God@2004","SBIN0021",10000);
-    // s.withdraw(1000);
-    // s.withdraw(1000);
-    // s.withdraw(1000);
-    // s.deposit(3000);
-    // s.Display_Statement();
-    // Date lucDOB;
-    // lucDOB.day=1;
-    // lucDOB.month=8;
-    // lucDOB.year=2003;
+    
 
 
 
