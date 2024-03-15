@@ -11,6 +11,7 @@ using namespace std;
 class ui
 {
 public:
+    
     void printup()
     {
         cout << " ";
@@ -131,14 +132,24 @@ void Copy_Date(Date &t, Date c)
     t.year = c.year;
 }
 
+void Input_date(Date&a){
+    
+
+    cout<<setw(20)<<"Enter In form dd mm yyyy:";
+    cin>>a.day>>a.month>>a.year;
+
+}
 // Class Bank
 class Bank : public ui
 {
 protected:
-    string Bank_Name; // Name of bank
+    string Bank_Name; // Name of bank let it be 1
     string Affiltrated_To;
+    static vector<string> Bank_Logs;
 
-    long double Amount_in_Bank;
+
+    static long double Amount_in_Bank;
+    //as this will not change as the no of user will change which will create many time of data for diff bank
 
     // converting data of bank to string[]
 
@@ -164,12 +175,15 @@ protected:
         Affiltrated_To = "R.B.I";
         Amount_in_Bank = kp;
     }
-    Bank(long double kp, string k) : Bank_Name(k), Affiltrated_To("R.B.I"), Amount_in_Bank(kp)
+    Bank(
+         string k) : Bank_Name(k), Affiltrated_To("R.B.I")
     {
+    // , Amount_in_Bank(kp)
+        // long double kp
     }
-    Bank(long double kp) : Affiltrated_To("R.B.I"), Amount_in_Bank(kp)
-    {
-    }
+    // Bank(long double kp) : Affiltrated_To("R.B.I"), Amount_in_Bank(kp)
+    // {
+    // }
 
 public:
     Bank() : Affiltrated_To("R.B.I")
@@ -181,54 +195,59 @@ public:
 
 // staff details
 
-class Employee : protected Bank
+class Employee 
 { // giving acess to bank for removing the ambiguity
 protected:
     string Emp_Id; // id
     string Name;
+    string Job_Role;
     struct Date Date_of_joining; // date of joining
     struct Date DOB;             // date of birth
-
+    ui Printer;
     double salary; // salary count
 
+    
 public:
     Employee()
     {
-        Copy_Date(Date_of_joining, Today); // Defaut date
+        Copy_Date(Date_of_joining, Today);
+         // Defaut date
     }
+
     Employee(string k) : Name(k)
     {
         Copy_Date(Date_of_joining, Today);
     }
 
-    Employee(string k, string kp) : Name(k), Emp_Id(kp)
+    Employee(string k, string kp,string km) : Name(k), Emp_Id(kp),Job_Role(km)
     {
         Copy_Date(Date_of_joining, Today);
     }
 
-    Employee(string k, string kp, Date tp, double sal) : Name(k), Emp_Id(kp), salary(sal)
-    {
-        Copy_Date(Date_of_joining, Today);
-        Copy_Date(DOB, tp);
-    }
-
-    Employee(string k, string kp, double sal, Date tp) : Name(k), Emp_Id(kp), salary(sal)
+    Employee(string k, string kp,string km, Date tp, double sal) : Name(k), Emp_Id(kp),Job_Role(km), salary(sal)
     {
         Copy_Date(Date_of_joining, Today);
         Copy_Date(DOB, tp);
     }
 
-    Employee(string k, string kp, Date tp) : Name(k), Emp_Id(kp)
+    Employee(string k, string kp,string km, double sal, Date tp) : Name(k), Emp_Id(kp),Job_Role(km), salary(sal)
     {
         Copy_Date(Date_of_joining, Today);
         Copy_Date(DOB, tp);
     }
 
-    Employee(string k, string kp, double sal) : Name(k), Emp_Id(kp), salary(sal)
+    Employee(string k, string kp,string km, Date tp) : Name(k), Emp_Id(kp),Job_Role(km)
+    {
+        Copy_Date(Date_of_joining, Today);
+        Copy_Date(DOB, tp);
+    }
+
+    Employee(string k, string kp,string km, double sal) : Name(k), Emp_Id(kp),Job_Role(km), salary(sal)
     {
         Copy_Date(Date_of_joining, Today);
     }
 
+    
     void Display_Employee_Details()
     {
         // creating string which helps in out output table
@@ -236,25 +255,28 @@ public:
         ocp << setfill('0') << setw(2) << Date_of_joining.day << '/' << setfill('0') << setw(2) << Date_of_joining.month << '/' << Date_of_joining.year;
         ocp2 << setfill('0') << setw(2) << DOB.day << '/' << setfill('0') << setw(2) << DOB.month << '/' << DOB.year;
         string Employee_Data[6][2] = {{"Name ", Name}, {"Employee ID ", Emp_Id}, {"Salary ", to_string(salary)}, {"Date Of Joining ", ocp.str()}, {"DOB ", ocp2.str()},{"Age",to_string(age(DOB))}};
-        print(Employee_Data, 6);
+        Printer.print(Employee_Data, 6);
     }
 };
 
-class Manager : public Employee
+class Manager : public Employee,public Bank
 {
 protected:
     unsigned short int Rate;
+    vector<Employee>Employee_List;
+    vector<User>User_List;
+
 
 public:
     Manager()
     {
         Rate = 7;
-    }
-    Manager(string k, string kp) : Employee(k, kp)
+    }//copy
+    Manager(string k, string kp,string km) : Employee(k, kp,km)
     {
         Rate = 7;
     }
-    Manager(string k, string kp, Date tp, double sal) : Employee(k, kp, tp, sal)
+    Manager(string k, string kp,string km, Date tp, double sal) : Employee(k, kp,km, tp, sal)
     {
         Rate = 7;
     }
@@ -324,7 +346,30 @@ public:
 
         print(kp, 1);
     }
+    void Disp_Bank_Logs(){
+        
+        string cp[Bank_Logs.size()+1];
+        for(size_t i=0;i<Bank_Logs.size();i++){
+            cp[i]=Bank_Logs[i];
 
+        }
+        ostringstream occ;
+        occ<<"Amount in Bank : "<<setprecision(2)<<Amount_in_Bank;
+        cp[Bank_Logs.size()]=occ.str();
+
+        print(cp,Bank_Logs.size()+1);
+        
+    }
+
+    void manager(){
+        cout<<setw(30)<<"Enter Emp_Id : ";
+        cin>>Emp_Id;
+        cout<<setw(30)<<"Enter Name : ";
+        cin>>Name;
+        cout<<"Enter Date of Joining";
+    }
+
+    
     // void Bank_N(string k);
     // void Disp_Bank_N();
     // string Bank_N();
@@ -338,36 +383,9 @@ public:
     // unsigned short int Rate();
 };
 
-class User : public Bank
-{
-protected:
-    string Name;
-    string C_Id;
-    string Aadhar_No;
-    struct Date DOB;
-    string Work;
-    string Address;
 
-public:
-    User() {}
-    User(string tp, string cp, string kp, string np, string bp, Date mp) : Name(tp), C_Id(cp), Aadhar_No(kp), Work(np), Address(bp)
-    {
-        Copy_Date(DOB, mp);
-    }
-    void Display_User_Details()
-{
-    ostringstream oss;
-    oss<<setw(2)<<setfill('0')<<DOB.day<<setfill('0')<<setw(2)<<DOB.month<<setw(4)<<setfill('0')<<DOB.year;
-    string details[6][2]={{"Name ",Name},{"Customer Id ",C_Id},{"Aadhar Number ",Aadhar_No},{"DOB ",oss.str()},{"Work ",Work},{"Address",Address}};
-    print(details,6);
 
-}
-    
-    
-
-};
-
-class Account{
+class Account:protected Bank{
     protected:
     string Account_No;
     string Account_Password;
@@ -384,7 +402,7 @@ class Account{
 
 };
 
-class Saving_Account:public User,protected Account{
+class Saving_Account:public Account{
     public:
     
     vector<string>Statement;
@@ -398,6 +416,14 @@ class Saving_Account:public User,protected Account{
         //balance
         opp<<setw(35)<<"Balance "<<fixed<<setw(11)<<setprecision(0)<<Amount<<setw(14)<<"";
         Statement.push_back(opp.str());
+        Amount_in_Bank-=cash;
+        ostringstream oss2,oss1;
+
+        oss2<<Account_No<<" WithDrawed "<<setprecision(2)<<cash<<" on "<<Today.day<<" "<<Today.month<<" "<<Today.year;
+        oss1<<" Amount : "<<Amount_in_Bank;
+        Bank_Logs.push_back(oss2.str());
+        Bank_Logs.push_back(oss1.str());
+
     }
     void deposit(double cash){
         Amount+=cash;//cahnege in money
@@ -410,11 +436,18 @@ class Saving_Account:public User,protected Account{
         opp<<setw(35)<<"Balance "<<fixed<<setw(11)<<setprecision(0)<<Amount<<setw(14)<<"";
         Statement.push_back(opp.str());
 
+        ostringstream oss1,oss2;
+        oss2<<Account_No<<" Deposited "<<setprecision(2)<<cash<<" on "<<Today.day<<" "<<Today.month<<" "<<Today.year;
+        oss1<<" Amount : "<<Amount_in_Bank;
+        Bank_Logs.push_back(oss2.str());
+        Bank_Logs.push_back(oss1.str());
+
     }
     Saving_Account(string no,string pass,string ifsc,double cash):Account( no,pass, ifsc,Today,cash){
         deposit(cash);
 
     }
+    Saving_Account(){}
     void Display_Statement(){
         string cp[Statement.size()+1];
         for(size_t i=0;i<Statement.size();i++){
@@ -429,22 +462,47 @@ class Saving_Account:public User,protected Account{
 
     }
 
-//     void Display_Statement(){
-//     string cp[Statement.size() ];
-//     for(size_t i = 0; i < Statement.size(); i++){
-//         cp[i] = Statement[i];
-//     }
 
     
 
-//     print(cp, Statement.size() );
-// }
+
+
+};
+
+class User :public ui
+{
+protected:
+    string Name;
+    string C_Id;
+    string Aadhar_No;
+    struct Date DOB;
+    string Work;
+    string Address;
+    Saving_Account S;//Details of bank account;
+
+
+public:
+    User():S () {}
+    User(string tp, string cp, string kp, string np, string bp, Date mp) : Name(tp), C_Id(cp), Aadhar_No(kp), Work(np), Address(bp)
+    {
+        Copy_Date(DOB, mp);
+    }
+    void Display_User_Details()
+{
+    ostringstream oss;
+    oss<<setw(2)<<setfill('0')<<DOB.day<<"/"<<setfill('0')<<setw(2)<<DOB.month<<"/"<<setw(4)<<setfill('0')<<DOB.year;
+    string details[6][2]={{"Name ",Name},{"Customer Id ",C_Id},{"Aadhar Number ",Aadhar_No},{"DOB ",oss.str()},{"Work ",Work},{"Address",Address}};
+    print(details,6);
+
+}
+    
+    
 
 };
 
 
 // void create_user(){
-
+//
 //     cout<<setw(30)<<"Enter User Name :";
 //     getline(cin,Name);
 //     cout<<setw(30)<<"Enter C_Id:";
@@ -479,62 +537,132 @@ class Saving_Account:public User,protected Account{
 //     cout<<setfill(' ');
 //     cout<<"|"<<endl;//date disp comp
 //     line();
-
+//
 //     cout<<setfill(' ')<<"|"<<setw(30)<<setfill(' ')<<"Proffession|"<<setfill(' ')<<setw(30)<<Work<<"|"<<endl;
 //     cout<<" ";
 //     for (int i=0;i<60;i++)
 //         cout<<"¯";
 //     cout<<endl;
 // }
-
+//
 // int main(){
-
+//
 //     User k;
 //     k.create_user();
 //     k.Disp_User_details();
 //     return 0;
 // }
 
+long double Bank::Amount_in_Bank=10000000;
+
+// void Input(){
+//     //Emp_Id,Name,Date_of_joining,DOB,Salary,Rate,Bank_name,Bank_amount,Bank_logs,Bank_affiltration
+
+
+// }
+
+// void Input_detalis(){
+//     ui Input;
+//     while(true){
+//     string a[][3]={"Input Data for ","1. Employee","2. User"};
+//     Input.print(a,1);
+//         int choice;
+//         cin>>choice;
+//         if(choice%2){
+//             string pl[1]={"Enter Details For Employee"};
+//             Input.print(pl,1);
+//             cout>>setw(20)>>"Emp_Id :";
+//             string Emp_Id; 
+//             string Name;
+//             struct Date Date_of_joining; 
+//             struct Date DOB;             
+//     double salary;
+//             cin          
+//         }
+//     }
+// }
+
+void input_check(string a,string b="y"){
+    try{
+        if(a!=b){
+            throw a;
+        }
+
+    }
+    catch(string msg){
+        cerr<<"Error!!\tWrong Input\t"<<msg<<endl;
+    }
+
+}
 
 int main(){
     Today.day=16;
     Today.month=1;
     Today.year=2024;
     Date dob;
-    dob.day=13;
+    dob.day=2;
     dob.month=10;
-    dob.year=2004;
+    dob.year=2003;
+    Date DOJ;
+    Input_date(DOJ);
+    Disp_Date(DOJ);
+    
 
-    // Manager M1("Prince","IS0089");
-    // Employee M2("Prince2","1MS23Is021-T");
-    // Employee M3("Prince3","1MS23Is021-T",dob);
-    // Manager M4("Prince4","1MS23Is021-T",dob,1000000);
-    // Employee M5("Prince","1MS23Is021-T",100000000);
-    // M.Display_Employee_Details();
-    // M2.Display_Employee_Details();
-    // M3.Display_Employee_Details();
-    // M4.Display_Employee_Details();
-    // M5.Display_Employee_Details();
-    // M1.Disp_Amount();
-    // M1.Bank_N("SBI");
-    // M1.Disp_Bank_N();
-    // M1.Disp_Rate();
-    // M4.Display_Employee_Details();
-    // Manager Lucky("Lucky","1MS23ME021",lucDOB,20000);
-    // Lucky.Display_Employee_Details();
+        
 
-    User u("Prince","9009 2237 3892","5158 6166 7182","Student","Benguluru",dob);
-    u.Display_User_Details();
-    Saving_Account s("1MS23IS021-T","2God@2004","SBIN0021",5000);
-    s.withdraw(200);
-    s.deposit(500);
-    s.withdraw(1000);
-    s.deposit(10000);
-    s.Display_Statement();
-    Date lucDOB;
-    lucDOB.day=1;
-    lucDOB.month=8;
-    lucDOB.year=2003;
+
 
     return 0;
 }
+
+
+
+
+
+//last snippet i was working was at statement and bank logs 
+// bank logs were given the static type and data is added in them using the same deposit and withdraw funtion
+//last snippet i was working was making an "manager" function in Manager to get input
+// wasnt able to complete this project as this project is going to be my tech debt;
+ 
+
+
+
+
+
+
+
+
+
+    // // Manager M1("Prince","IS0089");
+    // // Employee M2("Prince2","1MS23Is021-T");
+    // // Employee M3("Prince3","1MS23Is021-T",dob);
+    // // Manager M4("Prince4","1MS23Is021-T",dob,1000000);
+    // // Employee M5("Prince","1MS23Is021-T",100000000);
+    // // M.Display_Employee_Details();
+    // // M2.Display_Employee_Details();
+    // // M3.Display_Employee_Details();
+    // // M4.Display_Employee_Details();
+    // // M5.Display_Employee_Details();
+    // // M1.Disp_Amount();
+    // // M1.Bank_N("SBI");
+    // // M1.Disp_Bank_N();
+    // // M1.Disp_Rate();
+    // // M4.Display_Employee_Details();
+    // // Manager Lucky("Lucky","1MS23ME021",lucDOB,20000);
+    // // Lucky.Display_Employee_Details();
+
+    // User u("Sahil","9009 2237 3892","1234 5678 9876","Student","Benguluru",dob);
+    // u.Display_User_Details();
+    // Saving_Account s("1MS23IS021-T","2God@2004","SBIN0021",10000);
+    // s.withdraw(1000);
+    // s.withdraw(1000);
+    // s.withdraw(1000);
+    // s.deposit(3000);
+    // s.Display_Statement();
+    // Date lucDOB;
+    // lucDOB.day=1;
+    // lucDOB.month=8;
+    // lucDOB.year=2003;
+
+
+
