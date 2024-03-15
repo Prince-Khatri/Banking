@@ -721,6 +721,16 @@ int main(){
         
     */
 
+// Task for #day2
+
+/*
+    #day2
+        i will be working on the user setup linking this with one of the manager
+        just by giving an id of manager to him dont know how but will configure;
+
+        and account setup would be done with this so get tuned
+    
+    */
 
 
 
